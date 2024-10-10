@@ -6,19 +6,16 @@ jobs:
     strategy:
       matrix:
         module:
-#          - banking
+          - banking
           - expenses
           - invoices
     runs-on: ubuntu-latest
-    if: false
     steps:
       - name: checkout
         run: |
-          sleep 20
           if [ "${{ matrix.module }}" == "banking" ]
           then
             exit 1
           else
             exit 0
           fi
-
