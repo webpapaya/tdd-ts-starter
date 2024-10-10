@@ -1,0 +1,25 @@
+name: verify
+on:
+  workflow_run:
+    workflows:
+      - check
+    types:
+      - completed
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: filter changed modules
+        uses: actions/github-script@v6
+        id: changed-modules
+        with:
+          script: |
+            const response = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "${{ github.head_ref }}"
+            })
+            
+            console.log(response.data.check_runs)
+            console.log(response.data.check_runs.some((check) => check.status == "in_progress" || check.status == "failure"))
